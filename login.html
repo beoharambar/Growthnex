@@ -1,0 +1,1313 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Login | GrowthNex</title>
+  <meta
+    name="description"
+    content="Sign in or create your GrowthNex account. Build what's next."
+  />
+  <meta name="theme-color" content="#08090c" />
+
+  <style>
+    /* =========================================
+       GROWTHNEX AUTHENTICATION
+       Single-file HTML + CSS + JavaScript
+    ========================================= */
+
+    :root {
+      --bg: #08090c;
+      --panel: #101217;
+      --panel-light: #171a22;
+      --white: #f7f8fa;
+      --muted: #969ba7;
+      --line: rgba(255, 255, 255, 0.12);
+      --blue: #145cff;
+      --blue-light: #4c83ff;
+      --radius: 20px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      min-height: 100vh;
+      min-height: 100svh;
+      background: var(--bg);
+      color: var(--white);
+      font-family: Inter, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--blue-light);
+      outline-offset: 3px;
+    }
+
+    .page {
+      min-height: 100vh;
+      min-height: 100svh;
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      width: 100%;
+      max-width: 1600px;
+      margin: 0 auto;
+      padding: 6px 12px 22px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 23px;
+      font-weight: 750;
+      letter-spacing: -1.2px;
+    }
+
+    .brand-icon {
+      width: 36px;
+      height: 36px;
+      display: grid;
+      place-items: center;
+      border-radius: 10px;
+      background: var(--blue);
+      color: white;
+      font-size: 22px;
+      font-weight: 800;
+      box-shadow: 0 0 25px rgba(20, 92, 255, 0.18);
+    }
+
+    .brand-name span {
+      color: var(--blue-light);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 17px;
+      border: 1px solid var(--line);
+      border-radius: 100px;
+      color: #e8eaf0;
+      font-size: 13px;
+      transition: 0.25s ease;
+    }
+
+    .back-link:hover {
+      border-color: rgba(255, 255, 255, 0.4);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Main layout */
+
+    .auth-layout {
+      flex: 1;
+      width: 100%;
+      max-width: 1450px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(400px, 0.95fr);
+      gap: 22px;
+      min-height: 0;
+    }
+
+    /* Left editorial panel */
+
+    .visual-panel {
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 690px;
+      padding: clamp(28px, 4vw, 62px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: 24px;
+      isolation: isolate;
+      background:
+        radial-gradient(
+          ellipse at 15% 15%,
+          rgba(20, 92, 255, 0.3),
+          transparent 38%
+        ),
+        radial-gradient(
+          ellipse at 90% 80%,
+          rgba(28, 63, 153, 0.22),
+          transparent 40%
+        ),
+        linear-gradient(145deg, #171b27 0%, #0d0f15 58%, #090a0e 100%);
+    }
+
+    .visual-panel::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 480px;
+      height: 480px;
+      right: -160px;
+      top: 12%;
+      border: 1px solid rgba(92, 139, 255, 0.23);
+      border-radius: 50%;
+      box-shadow:
+        0 0 0 55px rgba(92, 139, 255, 0.035),
+        0 0 0 110px rgba(92, 139, 255, 0.025);
+    }
+
+    .visual-panel::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0;
+      pointer-events: none;
+      background: linear-gradient(
+        180deg,
+        transparent 35%,
+        rgba(0, 0, 0, 0.42) 100%
+      );
+    }
+
+    .visual-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .eyebrow {
+      color: #c4c9d5;
+      font-size: 11px;
+      font-weight: 650;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #c3c8d2;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #5f91ff;
+      box-shadow: 0 0 12px rgba(95, 145, 255, 0.8);
+    }
+
+    .visual-content {
+      position: relative;
+      margin-top: auto;
+      padding-top: 100px;
+      padding-bottom: 24px;
+    }
+
+    .visual-index {
+      margin-bottom: 22px;
+      color: var(--blue-light);
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: 2px;
+    }
+
+    .visual-content h1 {
+      max-width: 650px;
+      font-size: clamp(48px, 5.4vw, 88px);
+      font-weight: 540;
+      letter-spacing: -0.075em;
+      line-height: 0.98;
+    }
+
+    .visual-content h1 span {
+      color: #747986;
+    }
+
+    .visual-description {
+      max-width: 410px;
+      margin-top: 28px;
+      color: #b4b8c3;
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .visual-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      padding-top: 26px;
+      border-top: 1px solid var(--line);
+    }
+
+    .visual-bottom p {
+      color: #a2a7b2;
+      font-size: 12px;
+      line-height: 1.7;
+    }
+
+    .visual-bottom strong {
+      color: #f5f6f8;
+      font-weight: 550;
+    }
+
+    .decorative-mark {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    .decorative-mark span {
+      display: block;
+      width: 19px;
+      height: 4px;
+      border-radius: 10px;
+      background: #444957;
+    }
+
+    .decorative-mark span:first-child {
+      width: 35px;
+      background: var(--blue);
+    }
+
+    /* Right form panel */
+
+    .form-panel {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: clamp(25px, 4.3vw, 68px);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background:
+        radial-gradient(
+          ellipse at 100% 0%,
+          rgba(34, 58, 115, 0.1),
+          transparent 36%
+        ),
+        var(--panel);
+    }
+
+    .form-inner {
+      width: 100%;
+      max-width: 440px;
+      animation: appear 0.45s ease both;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-kicker {
+      margin-bottom: 17px;
+      color: var(--blue-light);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+    }
+
+    .form-title {
+      font-size: clamp(36px, 3.5vw, 50px);
+      font-weight: 550;
+      letter-spacing: -2.5px;
+      line-height: 1.08;
+    }
+
+    .form-subtitle {
+      margin-top: 15px;
+      margin-bottom: 31px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .inline-link {
+      color: #82a7ff;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      cursor: pointer;
+    }
+
+    /* Google button */
+
+    .google-button {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      min-height: 51px;
+      margin-bottom: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.17);
+      border-radius: 10px;
+      background: transparent;
+      color: #f1f2f5;
+      font-size: 13px;
+      font-weight: 550;
+      transition: 0.2s ease;
+    }
+
+    .google-button:hover {
+      background: rgba(255, 255, 255, 0.045);
+      border-color: rgba(255, 255, 255, 0.36);
+    }
+
+    .google-g {
+      font-size: 20px;
+      font-weight: 800;
+      color: #4285f4;
+    }
+
+    .separator {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      color: #7e8390;
+      font-size: 11px;
+    }
+
+    .separator::before,
+    .separator::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* Fields */
+
+    .field {
+      margin-bottom: 19px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 9px;
+      color: #e7e9ef;
+      font-size: 12px;
+      font-weight: 550;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .field input {
+      width: 100%;
+      height: 51px;
+      padding: 0 15px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 9px;
+      outline: none;
+      background: #171a22;
+      color: white;
+      font-size: 13px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .field input::placeholder {
+      color: #777d8a;
+    }
+
+    .field input:focus {
+      border-color: var(--blue-light);
+      box-shadow: 0 0 0 3px rgba(20, 92, 255, 0.14);
+    }
+
+    .field input[aria-invalid="true"] {
+      border-color: #ff7777;
+    }
+
+    .password-input {
+      padding-right: 68px !important;
+    }
+
+    .show-password {
+      position: absolute;
+      top: 50%;
+      right: 12px;
+      transform: translateY(-50%);
+      padding: 6px;
+      border: 0;
+      background: transparent;
+      color: #9ca3b2;
+      font-size: 11px;
+    }
+
+    .show-password:hover {
+      color: white;
+    }
+
+    .field-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 3px 0 24px;
+      color: #a3a8b4;
+      font-size: 12px;
+    }
+
+    .remember {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .remember input,
+    .terms input {
+      accent-color: var(--blue);
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+    }
+
+    .text-link {
+      border: 0;
+      background: transparent;
+      color: #9cb8ff;
+      font-size: 12px;
+    }
+
+    .text-link:hover,
+    .inline-link:hover {
+      color: white;
+    }
+
+    /* Primary action */
+
+    .primary-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      min-height: 53px;
+      padding: 13px 18px;
+      border: 1px solid var(--blue);
+      border-radius: 10px;
+      background: var(--blue);
+      color: white;
+      font-size: 13px;
+      font-weight: 650;
+      transition: transform 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-1px);
+      background: #2468ff;
+      box-shadow: 0 9px 28px rgba(20, 92, 255, 0.22);
+    }
+
+    .primary-button:active {
+      transform: translateY(0);
+    }
+
+    .primary-button:disabled {
+      opacity: 0.65;
+      cursor: wait;
+      transform: none;
+    }
+
+    .terms {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      margin: 3px 0 22px;
+      color: #a6abb7;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .terms input {
+      flex: 0 0 auto;
+      margin-top: 3px;
+    }
+
+    .form-footer {
+      margin-top: 25px;
+      color: #8c929f;
+      font-size: 12px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .form-footer button {
+      border: 0;
+      background: transparent;
+      color: #e9edf7;
+      font-size: inherit;
+      font-weight: 600;
+    }
+
+    .form-footer button:hover {
+      color: #8db0ff;
+    }
+
+    .security-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      margin-top: 23px;
+      color: #686e7b;
+      font-size: 10px;
+    }
+
+    .security-note svg {
+      width: 13px;
+      height: 13px;
+    }
+
+    /* Messages */
+
+    .message {
+      display: none;
+      margin: 0 0 17px;
+      padding: 12px 14px;
+      border: 1px solid var(--line);
+      border-radius: 9px;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.success {
+      border-color: rgba(82, 201, 139, 0.35);
+      background: rgba(82, 201, 139, 0.07);
+      color: #9be3bb;
+    }
+
+    .message.error {
+      border-color: rgba(255, 119, 119, 0.35);
+      background: rgba(255, 119, 119, 0.07);
+      color: #ffaaaa;
+    }
+
+    .strength {
+      margin-top: 8px;
+      color: #858b98;
+      font-size: 10px;
+    }
+
+    .strength-track {
+      height: 3px;
+      margin-top: 7px;
+      overflow: hidden;
+      border-radius: 5px;
+      background: #292d37;
+    }
+
+    .strength-bar {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: var(--blue-light);
+      transition: width 0.25s;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Bottom footer */
+
+    .site-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+      max-width: 1450px;
+      margin: 0 auto;
+      padding: 20px 12px 4px;
+      color: #707683;
+      font-size: 10px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .footer-links a:hover {
+      color: #dce2ef;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 1000px) {
+      .auth-layout {
+        grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1fr);
+      }
+
+      .visual-panel {
+        padding: 30px;
+        min-height: 650px;
+      }
+
+      .form-panel {
+        padding: 35px;
+      }
+
+      .visual-content h1 {
+        font-size: clamp(45px, 6vw, 65px);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding: 12px;
+      }
+
+      .topbar {
+        padding: 7px 5px 18px;
+      }
+
+      .brand {
+        font-size: 21px;
+      }
+
+      .brand-icon {
+        width: 33px;
+        height: 33px;
+      }
+
+      .back-link {
+        padding: 10px 12px;
+        font-size: 11px;
+      }
+
+      .auth-layout {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .visual-panel {
+        min-height: auto;
+        padding: 24px;
+        border-radius: 17px;
+      }
+
+      .visual-content {
+        padding-top: 55px;
+        padding-bottom: 30px;
+      }
+
+      .visual-content h1 {
+        max-width: 500px;
+        font-size: clamp(46px, 11vw, 68px);
+      }
+
+      .visual-description {
+        max-width: 370px;
+        margin-top: 17px;
+        font-size: 13px;
+      }
+
+      .visual-bottom {
+        padding-top: 17px;
+      }
+
+      .form-panel {
+        padding: 30px 23px;
+        border-radius: 17px;
+      }
+
+      .form-inner {
+        max-width: 470px;
+      }
+
+      .form-title {
+        font-size: 40px;
+      }
+
+      .form-subtitle {
+        margin-bottom: 25px;
+      }
+
+      .site-footer {
+        padding: 18px 5px 6px;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .status {
+        font-size: 9px;
+      }
+
+      .visual-panel {
+        padding: 20px;
+      }
+
+      .visual-content h1 {
+        font-size: 45px;
+      }
+
+      .visual-bottom p {
+        font-size: 10px;
+      }
+
+      .form-panel {
+        padding: 27px 18px;
+      }
+
+      .form-title {
+        font-size: 36px;
+      }
+
+      .site-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 9px;
+      }
+
+      .footer-links {
+        gap: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <header class="topbar">
+      <a class="brand" href="index.html" aria-label="GrowthNex home">
+        <span class="brand-icon">G</span>
+        <span class="brand-name">Growth<span>Nex</span></span>
+      </a>
+
+      <a class="back-link" href="index.html">
+        Back to website <span aria-hidden="true">↗</span>
+      </a>
+    </header>
+
+    <main class="auth-layout">
+
+      <!-- Left: brand story -->
+      <section class="visual-panel" aria-label="About GrowthNex">
+        <div class="visual-top">
+          <p class="eyebrow">Brand · Creative · Growth</p>
+
+          <span class="status">
+            <span class="status-dot"></span>
+            Built for what's next
+          </span>
+        </div>
+
+        <div class="visual-content">
+          <p class="visual-index">GROWTHNEX / 001</p>
+
+          <h1>
+            Build<br />
+            what's <span>next.</span>
+          </h1>
+
+          <p class="visual-description">
+            A stronger brand starts with a clearer direction.
+            Bring your ideas, business and ambitions into one
+            place built for what comes next.
+          </p>
+        </div>
+
+        <div class="visual-bottom">
+          <p>
+            <strong>Think bigger. Build better.</strong><br />
+            Your next chapter starts here.
+          </p>
+
+          <div class="decorative-mark" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Right: authentication forms -->
+      <section class="form-panel">
+        <div class="form-inner">
+
+          <p class="form-kicker" id="formKicker">Your GrowthNex account</p>
+
+          <h2 class="form-title" id="formTitle">Welcome back.</h2>
+
+          <p class="form-subtitle" id="formSubtitle">
+            Don't have an account?
+            <a href="#signup" class="inline-link" data-view="signup">
+              Create one
+            </a>
+          </p>
+
+          <div
+            class="message"
+            id="formMessage"
+            role="status"
+            aria-live="polite"
+          ></div>
+
+          <!-- Google sign-in button -->
+          <button class="google-button" id="googleButton" type="button">
+            <span class="google-g" aria-hidden="true">G</span>
+            <span>Continue with Google</span>
+          </button>
+
+          <div class="separator" id="separator">
+            <span>OR CONTINUE WITH EMAIL</span>
+          </div>
+
+          <!-- LOGIN -->
+          <form id="loginForm">
+            <div class="field">
+              <label for="loginEmail">Email address</label>
+              <input
+                id="loginEmail"
+                name="email"
+                type="email"
+                placeholder="you@company.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="loginPassword">Password</label>
+
+              <div class="input-wrap">
+                <input
+                  class="password-input"
+                  id="loginPassword"
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  autocomplete="current-password"
+                  minlength="8"
+                  required
+                />
+
+                <button
+                  class="show-password"
+                  type="button"
+                  data-toggle-password="loginPassword"
+                  aria-label="Show password"
+                >
+                  SHOW
+                </button>
+              </div>
+            </div>
+
+            <div class="field-row">
+              <label class="remember">
+                <input type="checkbox" id="rememberMe" />
+                Remember me
+              </label>
+
+              <button
+                class="text-link"
+                type="button"
+                data-view="forgot"
+              >
+                Forgot password?
+              </button>
+            </div>
+
+            <button class="primary-button" type="submit">
+              <span>Log in to GrowthNex</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+
+            <p class="form-footer">
+              New to GrowthNex?
+              <button type="button" data-view="signup">Create an account</button>
+            </p>
+          </form>
+
+          <!-- SIGN UP -->
+          <form id="signupForm" class="hidden">
+            <div class="field">
+              <label for="signupName">Full name</label>
+              <input
+                id="signupName"
+                name="name"
+                type="text"
+                placeholder="Your full name"
+                autocomplete="name"
+                minlength="2"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="signupEmail">Work or personal email</label>
+              <input
+                id="signupEmail"
+                name="email"
+                type="email"
+                placeholder="you@company.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+
+            <div class="field">
+              <label for="signupPassword">Create password</label>
+
+              <div class="input-wrap">
+                <input
+                  class="password-input"
+                  id="signupPassword"
+                  name="password"
+                  type="password"
+                  placeholder="At least 8 characters"
+                  autocomplete="new-password"
+                  minlength="8"
+                  required
+                />
+
+                <button
+                  class="show-password"
+                  type="button"
+                  data-toggle-password="signupPassword"
+                  aria-label="Show password"
+                >
+                  SHOW
+                </button>
+              </div>
+
+              <div class="strength">
+                <span id="strengthText">Use at least 8 characters</span>
+                <div class="strength-track">
+                  <div class="strength-bar" id="strengthBar"></div>
+                </div>
+              </div>
+            </div>
+
+            <label class="terms">
+              <input id="acceptTerms" type="checkbox" required />
+              <span>
+                I agree to the
+                <a class="inline-link" href="terms.html">Terms of Service</a>
+                and
+                <a class="inline-link" href="privacy.html">Privacy Policy</a>.
+              </span>
+            </label>
+
+            <button class="primary-button" type="submit">
+              <span>Create your account</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+
+            <p class="form-footer">
+              Already have an account?
+              <button type="button" data-view="login">Log in</button>
+            </p>
+          </form>
+
+          <!-- FORGOT PASSWORD -->
+          <form id="forgotForm" class="hidden">
+            <div class="field">
+              <label for="forgotEmail">Email address</label>
+              <input
+                id="forgotEmail"
+                name="email"
+                type="email"
+                placeholder="you@company.com"
+                autocomplete="email"
+                required
+              />
+            </div>
+
+            <button class="primary-button" type="submit">
+              <span>Send password reset link</span>
+              <span aria-hidden="true">↗</span>
+            </button>
+
+            <p class="form-footer">
+              Remembered your password?
+              <button type="button" data-view="login">Back to login</button>
+            </p>
+          </form>
+
+          <div class="security-note">
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.7"
+              aria-hidden="true"
+            >
+              <rect x="5" y="10" width="14" height="11" rx="2"></rect>
+              <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+            Your account experience, built with care.
+          </div>
+
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>© 2026 GrowthNex. Build what's next.</span>
+
+      <nav class="footer-links" aria-label="Footer">
+        <a href="index.html">Website</a>
+        <a href="https://www.instagram.com/_growthnex_/"
+           target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+        <a href="mailto:hello@growthnex.in">Contact</a>
+      </nav>
+    </footer>
+
+  </div>
+
+  <script>
+    /* =========================================
+       GROWTHNEX AUTH UI
+       Frontend demonstration only.
+       Connect a real authentication provider
+       before using this for real user accounts.
+    ========================================= */
+
+    const forms = {
+      login: document.getElementById("loginForm"),
+      signup: document.getElementById("signupForm"),
+      forgot: document.getElementById("forgotForm")
+    };
+
+    const title = document.getElementById("formTitle");
+    const kicker = document.getElementById("formKicker");
+    const subtitle = document.getElementById("formSubtitle");
+    const message = document.getElementById("formMessage");
+    const googleButton = document.getElementById("googleButton");
+    const separator = document.getElementById("separator");
+
+    const viewCopy = {
+      login: {
+        kicker: "Your GrowthNex account",
+        title: "Welcome back.",
+        subtitle: `Don't have an account?
+          <a href="#signup" class="inline-link" data-view="signup">
+            Create one
+          </a>`
+      },
+      signup: {
+        kicker: "Start building",
+        title: "Create account.",
+        subtitle: `Already have an account?
+          <a href="#login" class="inline-link" data-view="login">
+            Log in
+          </a>`
+      },
+      forgot: {
+        kicker: "Account recovery",
+        title: "Reset password.",
+        subtitle: "Enter your email and we'll help you recover access."
+      }
+    };
+
+    function showMessage(text, type = "success") {
+      message.textContent = text;
+      message.className = "message show " + type;
+    }
+
+    function clearMessage() {
+      message.textContent = "";
+      message.className = "message";
+    }
+
+    function setView(view) {
+      if (!forms[view]) return;
+
+      Object.entries(forms).forEach(([name, form]) => {
+        form.classList.toggle("hidden", name !== view);
+      });
+
+      kicker.textContent = viewCopy[view].kicker;
+      title.textContent = viewCopy[view].title;
+      subtitle.innerHTML = viewCopy[view].subtitle;
+
+      googleButton.classList.toggle("hidden", view === "forgot");
+      separator.classList.toggle("hidden", view === "forgot");
+
+      clearMessage();
+      history.replaceState(null, "", "#" + view);
+    }
+
+    // Switch between login, signup and recovery.
+    document.addEventListener("click", function (event) {
+      const trigger = event.target.closest("[data-view]");
+
+      if (trigger) {
+        event.preventDefault();
+        setView(trigger.dataset.view);
+      }
+    });
+
+    // Show/hide password.
+    document.querySelectorAll("[data-toggle-password]").forEach(button => {
+      button.addEventListener("click", () => {
+        const input = document.getElementById(
+          button.dataset.togglePassword
+        );
+
+        const isPassword = input.type === "password";
+        input.type = isPassword ? "text" : "password";
+        button.textContent = isPassword ? "HIDE" : "SHOW";
+        button.setAttribute(
+          "aria-label",
+          isPassword ? "Hide password" : "Show password"
+        );
+      });
+    });
+
+    // Password strength indicator.
+    const signupPassword = document.getElementById("signupPassword");
+    const strengthBar = document.getElementById("strengthBar");
+    const strengthText = document.getElementById("strengthText");
+
+    signupPassword.addEventListener("input", () => {
+      const value = signupPassword.value;
+      let score = 0;
+
+      if (value.length >= 8) score++;
+      if (/[A-Z]/.test(value) && /[a-z]/.test(value)) score++;
+      if (/\d/.test(value)) score++;
+      if (/[^A-Za-z0-9]/.test(value)) score++;
+
+      const labels = [
+        "Use at least 8 characters",
+        "Weak password",
+        "Fair password",
+        "Good password",
+        "Strong password"
+      ];
+
+      strengthBar.style.width = (score * 25) + "%";
+      strengthText.textContent = value ? labels[score] : labels[0];
+    });
+
+    /*
+      DEMO FORM HANDLERS
+
+      These handlers validate the interface but DO NOT
+      create accounts, authenticate users, or send emails.
+
+      Replace them with Supabase, Firebase, or your
+      chosen authentication provider before launch.
+    */
+
+    forms.login.addEventListener("submit", event => {
+      event.preventDefault();
+
+      if (!forms.login.reportValidity()) return;
+
+      showMessage(
+        "The login interface is ready. Connect an authentication provider to sign in securely.",
+        "success"
+      );
+    });
+
+    forms.signup.addEventListener("submit", event => {
+      event.preventDefault();
+
+      if (!forms.signup.reportValidity()) return;
+
+      showMessage(
+        "The sign-up interface is ready. Connect an authentication provider to create your account.",
+        "success"
+      );
+    });
+
+    forms.forgot.addEventListener("submit", event => {
+      event.preventDefault();
+
+      if (!forms.forgot.reportValidity()) return;
+
+      showMessage(
+        "Password recovery needs a configured authentication provider to send a real reset email.",
+        "success"
+      );
+    });
+
+    googleButton.addEventListener("click", () => {
+      showMessage(
+        "Google sign-in requires Google OAuth credentials and an authentication provider. This button is currently a UI placeholder.",
+        "error"
+      );
+    });
+
+    // Allow direct links such as login.html#signup.
+    const initialView = location.hash.replace("#", "");
+    setView(forms[initialView] ? initialView : "login");
+  </script>
+</body>
+</html>
